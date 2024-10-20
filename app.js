@@ -1,12 +1,20 @@
 const express = require("express");
-const app = express();
+const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3002;
+
+const app = express();
+const jsonParser = bodyParser.json();
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 app.get("/", (req, res) => res.type('html').send(html));
 
-app.post('/makeAppointment', function(req, res){
-	var htmlBody = "<p>test</p>";
+app.post('/sendMail', function(req, res){
 
 	const transporter = nodemailer.createTransport({
 		host: 'smtp.gmail.com',
@@ -18,12 +26,10 @@ app.post('/makeAppointment', function(req, res){
 	  });
 	var mailOptions = {
 		from: 'vijaytshedge@gmail.com',
-		to: 'vijaytshedge2007@yahoo.co.in',
-		subject: 'Lifeline inquiry',
-		html: htmlBody
+		to: req.body.to,
+		subject: req.body.subject,
+		html: req.body.msg
 	};
-
-	console.log(mailOptions);
 
 	transporter.sendMail(mailOptions, function (error, info) {
 		if (error) {
