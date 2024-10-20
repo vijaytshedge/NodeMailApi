@@ -34,10 +34,10 @@ app.post('/sendMail', function(req, res){
 	transporter.sendMail(mailOptions, function (error, info) {
 		if (error) {
 			console.log(error);
-			res.send('Error. Register up called');
+			res.send('error');
 		} else {
 			console.log('Email sent: ' + info.response);
-			res.send('Success. Register up called');
+			res.send('success');
 		}
 	});
 });
